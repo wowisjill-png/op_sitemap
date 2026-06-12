@@ -15,12 +15,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .logo-text .s1{color:#fff}
 .logo-text .s2{color:#e05c8a}
 .r-item{width:60px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:1px;padding:4px 2px;flex-shrink:0}
-.r-item svg{width:20px;height:20px;stroke:rgba(255,255,255,0.38);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.15s;flex-shrink:0}
+.r-item svg.icon{width:20px;height:20px;stroke:rgba(255,255,255,0.38);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.15s;flex-shrink:0}
 .r-item span{font-size:9px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.2;transition:color 0.15s;word-break:break-word}
-.r-item:hover svg{stroke:rgba(255,255,255,0.85)}
+.r-item:hover svg.icon{stroke:rgba(255,255,255,0.85)}
 .r-item:hover span{color:rgba(255,255,255,0.8)}
 .r-item.active{background:rgba(255,255,255,0.1)}
-.r-item.active svg{stroke:#e05c8a}
+.r-item.active svg.icon{stroke:#e05c8a}
 .r-item.active span{color:rgba(255,255,255,0.8)}
 .subnav{width:210px;min-width:210px;background:#1a2535;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid rgba(255,255,255,0.07)}
 .subnav-header{padding:13px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
@@ -75,27 +75,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
-// SVG icon paths (stroke-based, viewBox 0 0 24 24)
 const ICONS = {
-  game: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/>',
-  messages: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-  world: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
-  chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
-  tournament: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
-  video: '<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>',
-  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  game:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/>',
+  messages:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  world:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  tournament:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+  video:'<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
 };
+const svgIcon=k=>`<svg class="icon" viewBox="0 0 24 24">${ICONS[k]||ICONS.settings}</svg>`;
+const chevSVG=o=>`<svg class="chev${o?' open':''}" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
 
-function svgIcon(key) {
-  return `<svg viewBox="0 0 24 24">${ICONS[key]||ICONS.settings}</svg>`;
-}
-function chevSVG(open) {
-  return `<svg class="chev${open?' open':''}" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
-}
-
-const menu = [
+const menu=[
   {id:'gm',label:'Game Management',icon:'game',short:'Game',children:[
+    {id:'gm-lpa0',label:'Lobby Promotion Assignment',desc:'Assign promotions to lobby tabs.'},
+    {id:'gm-wta',label:'Website → Table Assignment',desc:'Map tables to specific websites or domains.'},
+    {id:'gm-gc',label:'Game Configuration',children:[
+      {id:'gm-gc-tc',label:'Table Config',desc:'General table configuration settings.'},
+      {id:'gm-gc-bl',label:'Bet Limits',desc:'Configure bet limit settings per game or table.'},
+      {id:'gm-gc-mrl',label:'Max Round Limit',desc:'Define maximum round limit rules.'},
+      {id:'gm-gc-mbr',label:'Max Bet Round',desc:'Set maximum bet round constraints.'},
+      {id:'gm-gc-rp',label:'Random Pay Rule Configuration',desc:'Configure random pay rule settings.'},
+    ]},
     {id:'gm-lm',label:'Lobby Management',children:[
       {id:'gm-lm-ltd',label:'Lobby Tab Definition',desc:'Define and manage lobby tab groups.'},
       {id:'gm-lm-lgm',label:'Lobby Tab → Game Mapping',desc:'Map game codes to lobby tab content groups.'},
@@ -104,14 +107,9 @@ const menu = [
       {id:'gm-lm-tsp',label:'Table Sorting Rule (Studio Priority)',desc:'Configure studio priority for table ordering.'},
       {id:'gm-lm-lpa',label:'Lobby Promotion Assignment',desc:'Assign promotions to lobby tabs.'},
     ]},
-    {id:'gm-wta',label:'Website → Table Assignment',desc:'Map tables to specific websites or domains.'},
-    {id:'gm-gc',label:'Game Configuration',children:[
-      {id:'gm-gc-bl',label:'Bet Limits',desc:'Configure bet limit settings per game or table.'},
-      {id:'gm-gc-mbr',label:'Max Bet Round',desc:'Set maximum bet round constraints.'},
-      {id:'gm-gc-mrl',label:'Max Round Limit',desc:'Define maximum round limit rules.'},
-      {id:'gm-gc-rp',label:'Random Pay Rule Configuration',desc:'Configure random pay rule settings.'},
-      {id:'gm-gc-tc',label:'Table Config',desc:'General table configuration settings.'},
-    ]},
+  ]},
+  {id:'ss',label:'Streaming Setting',icon:'video',short:'Streaming',children:[
+    {id:'ss-sdt',label:'Streaming Delay Time',desc:'Configure the streaming delay time for live tables.'},
   ]},
   {id:'im',label:'Interaction Management',icon:'messages',short:'Interaction',children:[
     {id:'im-gs',label:'GiftShop',children:[
@@ -171,9 +169,6 @@ const menu = [
       {id:'rs-rq-rpr',label:'Random Pay Result',desc:'View random pay result records.'},
       {id:'rs-rq-rmbt',label:'Result Monitor By Time',desc:'Monitor results filtered by time range.'},
     ]},
-  ]},
-  {id:'ss',label:'Streaming Setting',icon:'video',short:'Streaming',children:[
-    {id:'ss-sdt',label:'Streaming Delay Time',desc:'Configure the streaming delay time for live tables.'},
   ]},
   {id:'adm',label:'Admin',icon:'settings',short:'Admin',children:[
     {id:'adm-am',label:'Account Management',desc:'Manage admin accounts and credentials.'},
