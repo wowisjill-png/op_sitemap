@@ -1,50 +1,61 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>sexy 2.0 Back Office</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-.shell{display:flex;height:680px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.shell{display:flex;height:680px;width:900px;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.18)}
 .rail{width:72px;min-width:72px;background:#0f1923;display:flex;flex-direction:column;align-items:center;padding-top:0;overflow-y:auto;overflow-x:hidden}
 .rail::-webkit-scrollbar{display:none}
-.rail-logo{width:72px;height:48px;display:flex;align-items:center;justify-content:center;border-bottom:0.5px solid rgba(255,255,255,0.08);margin-bottom:6px;flex-shrink:0}
-.r-item{width:60px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:1px;padding:4px 2px;flex-shrink:0}
-.r-item i{font-size:19px;color:rgba(255,255,255,0.38);transition:color 0.15s}
+.rail-logo{width:72px;height:48px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:6px;flex-shrink:0}
+.logo-text{font-size:11px;font-weight:700;line-height:1.15;text-align:center}
+.logo-text .s1{color:#fff}
+.logo-text .s2{color:#e05c8a}
+.r-item{width:60px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:1px;padding:4px 2px;flex-shrink:0}
+.r-item svg{width:20px;height:20px;stroke:rgba(255,255,255,0.38);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.15s;flex-shrink:0}
 .r-item span{font-size:9px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.2;transition:color 0.15s;word-break:break-word}
-.r-item:hover i,.r-item:hover span{color:rgba(255,255,255,0.8)}
+.r-item:hover svg{stroke:rgba(255,255,255,0.85)}
+.r-item:hover span{color:rgba(255,255,255,0.8)}
 .r-item.active{background:rgba(255,255,255,0.1)}
-.r-item.active i{color:#5bc8a8}
-.r-item.active span{color:rgba(255,255,255,0.75)}
-.subnav{width:210px;min-width:210px;background:#1a2535;display:flex;flex-direction:column;overflow:hidden;border-right:0.5px solid rgba(255,255,255,0.07)}
-.subnav-header{padding:13px 14px 10px;border-bottom:0.5px solid rgba(255,255,255,0.08);flex-shrink:0}
+.r-item.active svg{stroke:#e05c8a}
+.r-item.active span{color:rgba(255,255,255,0.8)}
+.subnav{width:210px;min-width:210px;background:#1a2535;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid rgba(255,255,255,0.07)}
+.subnav-header{padding:13px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
 .subnav-title{font-size:13px;font-weight:500;color:#fff}
 .subnav-scroll{overflow-y:auto;flex:1;padding:6px 0}
 .subnav-scroll::-webkit-scrollbar{width:3px}
 .subnav-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:3px}
-.sn2{display:flex;align-items:center;gap:6px;padding:7px 10px 7px 12px;cursor:pointer;font-size:12.5px;color:rgba(255,255,255,0.55);transition:background 0.15s;border-radius:6px;margin:1px 6px}
+.sn2{display:flex;align-items:center;gap:6px;padding:7px 10px 7px 12px;cursor:pointer;font-size:12.5px;color:rgba(255,255,255,0.55);transition:background 0.15s;border-radius:6px;margin:1px 6px;user-select:none}
 .sn2:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85)}
 .sn2.open{color:rgba(255,255,255,0.85)}
 .sn2 .lbl{flex:1;line-height:1.3}
-.sn2 .chev{font-size:10px;color:rgba(255,255,255,0.25);transition:transform 0.2s;flex-shrink:0}
-.sn2 .chev.open{transform:rotate(90deg)}
-.sn3{display:flex;align-items:center;padding:5px 10px 5px 26px;cursor:pointer;font-size:12px;color:rgba(255,255,255,0.4);transition:background 0.15s;border-radius:6px;margin:1px 6px;line-height:1.3}
+.chev{width:10px;height:10px;stroke:rgba(255,255,255,0.25);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform 0.2s;flex-shrink:0}
+.chev.open{transform:rotate(90deg)}
+.sn3{display:flex;align-items:center;padding:5px 10px 5px 26px;cursor:pointer;font-size:12px;color:rgba(255,255,255,0.4);transition:background 0.15s;border-radius:6px;margin:1px 6px;line-height:1.3;user-select:none}
 .sn3:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8)}
-.sn3.active{background:rgba(91,200,168,0.12);color:#5bc8a8}
-.sn2.leaf-active{background:rgba(91,200,168,0.12);color:#5bc8a8}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{height:48px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;padding:0 20px;background:var(--color-background-primary);flex-shrink:0}
-.breadcrumb{font-size:12px;color:var(--color-text-secondary)}
-.content{flex:1;padding:24px;background:var(--color-background-tertiary);overflow-y:auto}
-.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--color-text-secondary)}
-.placeholder i{font-size:36px;margin-bottom:12px;opacity:0.25}
-.placeholder p{font-size:13px;opacity:0.4}
-.content-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px}
-.ctag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-bottom:10px;background:var(--color-background-info);color:var(--color-text-info)}
-.ctitle{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
-.cdesc{font-size:13px;color:var(--color-text-secondary);line-height:1.6}
+.sn3.active{background:rgba(224,92,138,0.15);color:#e05c8a}
+.sn2.leaf-active{background:rgba(224,92,138,0.15);color:#e05c8a}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
+.topbar{height:48px;border-bottom:1px solid #e2e6ea;display:flex;align-items:center;padding:0 20px;background:#fff;flex-shrink:0}
+.breadcrumb{font-size:12px;color:#888}
+.content{flex:1;padding:24px;overflow-y:auto}
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#bbb}
+.placeholder svg{width:40px;height:40px;stroke:#ccc;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;margin-bottom:12px}
+.placeholder p{font-size:13px}
+.content-card{background:#fff;border:1px solid #e8eaed;border-radius:10px;padding:20px}
+.ctag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-bottom:10px;background:rgba(224,92,138,0.1);color:#e05c8a}
+.ctitle{font-size:16px;font-weight:500;color:#1a1a2e;margin-bottom:6px}
+.cdesc{font-size:13px;color:#666;line-height:1.6}
 </style>
-
+</head>
+<body>
 <div class="shell">
   <div class="rail">
     <div class="rail-logo">
-      <i class="ti ti-layout-dashboard" style="font-size:20px;color:#5bc8a8" aria-hidden="true"></i>
+      <div class="logo-text"><div class="s1">sexy</div><div class="s2">2.0</div></div>
     </div>
     <div id="rail"></div>
   </div>
@@ -56,7 +67,7 @@
     <div class="topbar"><span class="breadcrumb" id="bc">Select a menu item</span></div>
     <div class="content" id="content">
       <div class="placeholder">
-        <i class="ti ti-layout-sidebar-left-collapse" aria-hidden="true"></i>
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="10" rx="1"/><rect x="14" y="17" width="7" height="4" rx="1"/></svg>
         <p>Choose a function from the menu</p>
       </div>
     </div>
@@ -64,8 +75,27 @@
 </div>
 
 <script>
+// SVG icon paths (stroke-based, viewBox 0 0 24 24)
+const ICONS = {
+  game: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/>',
+  messages: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  world: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  tournament: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+  video: '<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+};
+
+function svgIcon(key) {
+  return `<svg viewBox="0 0 24 24">${ICONS[key]||ICONS.settings}</svg>`;
+}
+function chevSVG(open) {
+  return `<svg class="chev${open?' open':''}" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
+}
+
 const menu = [
-  {id:'gm',label:'Game Management',icon:'ti-device-gamepad-2',short:'Game',children:[
+  {id:'gm',label:'Game Management',icon:'game',short:'Game',children:[
     {id:'gm-lm',label:'Lobby Management',children:[
       {id:'gm-lm-ltd',label:'Lobby Tab Definition',desc:'Define and manage lobby tab groups.'},
       {id:'gm-lm-lgm',label:'Lobby Tab → Game Mapping',desc:'Map game codes to lobby tab content groups.'},
@@ -83,7 +113,7 @@ const menu = [
       {id:'gm-gc-tc',label:'Table Config',desc:'General table configuration settings.'},
     ]},
   ]},
-  {id:'im',label:'Interaction Management',icon:'ti-messages',short:'Interaction',children:[
+  {id:'im',label:'Interaction Management',icon:'messages',short:'Interaction',children:[
     {id:'im-gs',label:'GiftShop',children:[
       {id:'im-gs-gp',label:'Gift Price',desc:'Set pricing for gifts in the gift shop.'},
       {id:'im-gs-gn',label:'Gift Name',desc:'Manage gift names and localization.'},
@@ -97,7 +127,7 @@ const menu = [
       {id:'im-ch-nn',label:'Nick Name History (90 days)',desc:'View nickname change history for the past 90 days.'},
     ]},
   ]},
-  {id:'wm',label:'Website Management',icon:'ti-world',short:'Website',children:[
+  {id:'wm',label:'Website Management',icon:'world',short:'Website',children:[
     {id:'wm-ewf',label:'Enable Website Features',desc:'Toggle website features on or off.'},
     {id:'wm-api',label:'API & Integration Settings',children:[
       {id:'wm-api-sip',label:'API Safe IP',desc:'Configure whitelisted safe IPs for API access.'},
@@ -110,7 +140,7 @@ const menu = [
     {id:'wm-aw',label:'Add Website',desc:'Register and add a new website to the platform.'},
     {id:'wm-wpo',label:'Website Parameter Overview',desc:'Overview of all website configuration parameters.'},
   ]},
-  {id:'rp',label:'Report',icon:'ti-chart-bar',short:'Report',children:[
+  {id:'rp',label:'Report',icon:'chart',short:'Report',children:[
     {id:'rp-tr',label:'Transaction Reports',children:[
       {id:'rp-tr-thd',label:'Txn History By Domain',desc:'View transaction history filtered by domain.'},
       {id:'rp-tr-tht',label:'Txn History By TxnID',desc:'View transaction history filtered by transaction ID.'},
@@ -125,7 +155,7 @@ const menu = [
       {id:'rp-pr-rbw',label:'Report By Website',desc:'Performance report grouped by website.'},
     ]},
   ]},
-  {id:'rs',label:'Result',icon:'ti-tournament',short:'Result',children:[
+  {id:'rs',label:'Result',icon:'tournament',short:'Result',children:[
     {id:'rs-rgs',label:'Report By GameShoe',desc:'View results reported by game shoe.'},
     {id:'rs-rm',label:'Result Modify',children:[
       {id:'rs-rm-ar',label:'Add Result',desc:'Manually add a game result.'},
@@ -142,15 +172,15 @@ const menu = [
       {id:'rs-rq-rmbt',label:'Result Monitor By Time',desc:'Monitor results filtered by time range.'},
     ]},
   ]},
-  {id:'ss',label:'Streaming Setting',icon:'ti-video',short:'Streaming',children:[
+  {id:'ss',label:'Streaming Setting',icon:'video',short:'Streaming',children:[
     {id:'ss-sdt',label:'Streaming Delay Time',desc:'Configure the streaming delay time for live tables.'},
   ]},
-  {id:'adm',label:'Admin',icon:'ti-settings',short:'Admin',children:[
+  {id:'adm',label:'Admin',icon:'settings',short:'Admin',children:[
     {id:'adm-am',label:'Account Management',desc:'Manage admin accounts and credentials.'},
     {id:'adm-rm',label:'Role Management',desc:'Define and manage user roles.'},
     {id:'adm-pm',label:'Permission Management',desc:'Configure role-based permissions.'},
   ]},
-  {id:'sa',label:'Super Admin',icon:'ti-shield-lock',short:'Super Admin',children:[
+  {id:'sa',label:'Super Admin',icon:'shield',short:'Super Admin',children:[
     {id:'sa-awt',label:'Account & Wallet Tools',children:[
       {id:'sa-awt-cta',label:'Create Test Account',desc:'Create test accounts for QA purposes.'},
       {id:'sa-awt-mkr',label:'MarKetKR Auto Add Balance',desc:'Automatically add balance for MarKetKR accounts.'},
@@ -170,9 +200,9 @@ const menu = [
   ]},
 ];
 
-let activeL1 = menu[0].id;
-const openL2 = new Set();
-let activeLeaf = null;
+let activeL1=menu[0].id;
+const openL2=new Set();
+let activeLeaf=null;
 
 function findItem(items,id){for(const it of items){if(it.id===id)return it;if(it.children){const f=findItem(it.children,id);if(f)return f;}}}
 function findParents(items,id,path=[]){for(const it of items){if(it.id===id)return[...path,it];if(it.children){const f=findParents(it.children,id,[...path,it]);if(f)return f;}}}
@@ -182,7 +212,7 @@ function renderRail(){
   const el=document.getElementById('rail');
   el.innerHTML=menu.map(l1=>`
     <div class="r-item${activeL1===l1.id?' active':''}" data-l1="${l1.id}">
-      <i class="ti ${l1.icon}" aria-hidden="true"></i>
+      ${svgIcon(l1.icon)}
       <span>${l1.short||l1.label}</span>
     </div>`).join('');
   el.querySelectorAll('[data-l1]').forEach(e=>{
@@ -205,7 +235,7 @@ function renderSubnav(){
     const isLA=activeLeaf===l2.id;
     html+=`<div class="sn2${isLA?' leaf-active':''}${o2?' open':''}" data-id="${l2.id}" data-leaf="${leaf2}">
       <span class="lbl">${l2.label}</span>
-      ${!leaf2?`<i class="ti ti-chevron-right chev${o2?' open':''}"></i>`:''}
+      ${!leaf2?chevSVG(o2):''}
     </div>`;
     if(!leaf2&&o2){
       for(const l3 of l2.children){
@@ -239,3 +269,5 @@ function renderSubnav(){
 
 renderRail();renderSubnav();
 </script>
+</body>
+</html>
