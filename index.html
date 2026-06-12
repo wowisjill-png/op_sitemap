@@ -1,0 +1,241 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:flex;height:680px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.rail{width:72px;min-width:72px;background:#0f1923;display:flex;flex-direction:column;align-items:center;padding-top:0;overflow-y:auto;overflow-x:hidden}
+.rail::-webkit-scrollbar{display:none}
+.rail-logo{width:72px;height:48px;display:flex;align-items:center;justify-content:center;border-bottom:0.5px solid rgba(255,255,255,0.08);margin-bottom:6px;flex-shrink:0}
+.r-item{width:60px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:1px;padding:4px 2px;flex-shrink:0}
+.r-item i{font-size:19px;color:rgba(255,255,255,0.38);transition:color 0.15s}
+.r-item span{font-size:9px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.2;transition:color 0.15s;word-break:break-word}
+.r-item:hover i,.r-item:hover span{color:rgba(255,255,255,0.8)}
+.r-item.active{background:rgba(255,255,255,0.1)}
+.r-item.active i{color:#5bc8a8}
+.r-item.active span{color:rgba(255,255,255,0.75)}
+.subnav{width:210px;min-width:210px;background:#1a2535;display:flex;flex-direction:column;overflow:hidden;border-right:0.5px solid rgba(255,255,255,0.07)}
+.subnav-header{padding:13px 14px 10px;border-bottom:0.5px solid rgba(255,255,255,0.08);flex-shrink:0}
+.subnav-title{font-size:13px;font-weight:500;color:#fff}
+.subnav-scroll{overflow-y:auto;flex:1;padding:6px 0}
+.subnav-scroll::-webkit-scrollbar{width:3px}
+.subnav-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:3px}
+.sn2{display:flex;align-items:center;gap:6px;padding:7px 10px 7px 12px;cursor:pointer;font-size:12.5px;color:rgba(255,255,255,0.55);transition:background 0.15s;border-radius:6px;margin:1px 6px}
+.sn2:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85)}
+.sn2.open{color:rgba(255,255,255,0.85)}
+.sn2 .lbl{flex:1;line-height:1.3}
+.sn2 .chev{font-size:10px;color:rgba(255,255,255,0.25);transition:transform 0.2s;flex-shrink:0}
+.sn2 .chev.open{transform:rotate(90deg)}
+.sn3{display:flex;align-items:center;padding:5px 10px 5px 26px;cursor:pointer;font-size:12px;color:rgba(255,255,255,0.4);transition:background 0.15s;border-radius:6px;margin:1px 6px;line-height:1.3}
+.sn3:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8)}
+.sn3.active{background:rgba(91,200,168,0.12);color:#5bc8a8}
+.sn2.leaf-active{background:rgba(91,200,168,0.12);color:#5bc8a8}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:48px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;padding:0 20px;background:var(--color-background-primary);flex-shrink:0}
+.breadcrumb{font-size:12px;color:var(--color-text-secondary)}
+.content{flex:1;padding:24px;background:var(--color-background-tertiary);overflow-y:auto}
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--color-text-secondary)}
+.placeholder i{font-size:36px;margin-bottom:12px;opacity:0.25}
+.placeholder p{font-size:13px;opacity:0.4}
+.content-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px}
+.ctag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-bottom:10px;background:var(--color-background-info);color:var(--color-text-info)}
+.ctitle{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.cdesc{font-size:13px;color:var(--color-text-secondary);line-height:1.6}
+</style>
+
+<div class="shell">
+  <div class="rail">
+    <div class="rail-logo">
+      <i class="ti ti-layout-dashboard" style="font-size:20px;color:#5bc8a8" aria-hidden="true"></i>
+    </div>
+    <div id="rail"></div>
+  </div>
+  <div class="subnav">
+    <div class="subnav-header"><div class="subnav-title" id="subnav-title">—</div></div>
+    <div class="subnav-scroll" id="subnav"></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><span class="breadcrumb" id="bc">Select a menu item</span></div>
+    <div class="content" id="content">
+      <div class="placeholder">
+        <i class="ti ti-layout-sidebar-left-collapse" aria-hidden="true"></i>
+        <p>Choose a function from the menu</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const menu = [
+  {id:'gm',label:'Game Management',icon:'ti-device-gamepad-2',short:'Game',children:[
+    {id:'gm-lm',label:'Lobby Management',children:[
+      {id:'gm-lm-ltd',label:'Lobby Tab Definition',desc:'Define and manage lobby tab groups.'},
+      {id:'gm-lm-lgm',label:'Lobby Tab → Game Mapping',desc:'Map game codes to lobby tab content groups.'},
+      {id:'gm-lm-tsr',label:'Lobby Tab Sorting Rule',desc:'Configure the display order of lobby tab categories.'},
+      {id:'gm-lm-tdlp',label:'Table Sorting Rule (Dealer Language Priority)',desc:'Set dealer language priority for table sorting.'},
+      {id:'gm-lm-tsp',label:'Table Sorting Rule (Studio Priority)',desc:'Configure studio priority for table ordering.'},
+      {id:'gm-lm-lpa',label:'Lobby Promotion Assignment',desc:'Assign promotions to lobby tabs.'},
+    ]},
+    {id:'gm-wta',label:'Website → Table Assignment',desc:'Map tables to specific websites or domains.'},
+    {id:'gm-gc',label:'Game Configuration',children:[
+      {id:'gm-gc-bl',label:'Bet Limits',desc:'Configure bet limit settings per game or table.'},
+      {id:'gm-gc-mbr',label:'Max Bet Round',desc:'Set maximum bet round constraints.'},
+      {id:'gm-gc-mrl',label:'Max Round Limit',desc:'Define maximum round limit rules.'},
+      {id:'gm-gc-rp',label:'Random Pay Rule Configuration',desc:'Configure random pay rule settings.'},
+      {id:'gm-gc-tc',label:'Table Config',desc:'General table configuration settings.'},
+    ]},
+  ]},
+  {id:'im',label:'Interaction Management',icon:'ti-messages',short:'Interaction',children:[
+    {id:'im-gs',label:'GiftShop',children:[
+      {id:'im-gs-gp',label:'Gift Price',desc:'Set pricing for gifts in the gift shop.'},
+      {id:'im-gs-gn',label:'Gift Name',desc:'Manage gift names and localization.'},
+      {id:'im-gs-gi',label:'Gift Icon & Display Order',desc:'Configure gift icons and their display ordering.'},
+    ]},
+    {id:'im-ch',label:'Chat',children:[
+      {id:'im-ch-bk',label:'Block Key Word',desc:'Manage blocked keywords in chat.'},
+      {id:'im-ch-cm',label:'Chat Mute List',desc:'Manage the list of muted players in chat.'},
+      {id:'im-ch-cs',label:'Chat Scope Settings',desc:'Configure chat scope and visibility rules.'},
+      {id:'im-ch-cmh',label:'Chat Message History',desc:'View and search chat message history.'},
+      {id:'im-ch-nn',label:'Nick Name History (90 days)',desc:'View nickname change history for the past 90 days.'},
+    ]},
+  ]},
+  {id:'wm',label:'Website Management',icon:'ti-world',short:'Website',children:[
+    {id:'wm-ewf',label:'Enable Website Features',desc:'Toggle website features on or off.'},
+    {id:'wm-api',label:'API & Integration Settings',children:[
+      {id:'wm-api-sip',label:'API Safe IP',desc:'Configure whitelisted safe IPs for API access.'},
+      {id:'wm-api-sp',label:'API Site Properties',desc:'Manage API site property settings.'},
+    ]},
+    {id:'wm-drr',label:'Domain Routing Rules',children:[
+      {id:'wm-drr-ds',label:'Domain Setting（域名管理）',desc:'Manage domain name configurations.'},
+      {id:'wm-drr-er',label:'Enforce Redirect',desc:'Configure forced redirect rules for domains.'},
+    ]},
+    {id:'wm-aw',label:'Add Website',desc:'Register and add a new website to the platform.'},
+    {id:'wm-wpo',label:'Website Parameter Overview',desc:'Overview of all website configuration parameters.'},
+  ]},
+  {id:'rp',label:'Report',icon:'ti-chart-bar',short:'Report',children:[
+    {id:'rp-tr',label:'Transaction Reports',children:[
+      {id:'rp-tr-thd',label:'Txn History By Domain',desc:'View transaction history filtered by domain.'},
+      {id:'rp-tr-tht',label:'Txn History By TxnID',desc:'View transaction history filtered by transaction ID.'},
+      {id:'rp-tr-thu',label:'Txn History By UserID',desc:'View transaction history filtered by user ID.'},
+    ]},
+    {id:'rp-cr',label:'Custom Reports',children:[
+      {id:'rp-cr-kr1',label:'Txn History Sum by UserId For KR Site',desc:'Summarised transaction history by user ID for KR site.'},
+      {id:'rp-cr-kr2',label:'Txn History Sum Group By Currency For KR Site',desc:'Summarised transaction history grouped by currency for KR site.'},
+    ]},
+    {id:'rp-pr',label:'Performance Reports',children:[
+      {id:'rp-pr-t10',label:'Top 10 Reports',desc:'View top 10 performance reports.'},
+      {id:'rp-pr-rbw',label:'Report By Website',desc:'Performance report grouped by website.'},
+    ]},
+  ]},
+  {id:'rs',label:'Result',icon:'ti-tournament',short:'Result',children:[
+    {id:'rs-rgs',label:'Report By GameShoe',desc:'View results reported by game shoe.'},
+    {id:'rs-rm',label:'Result Modify',children:[
+      {id:'rs-rm-ar',label:'Add Result',desc:'Manually add a game result.'},
+      {id:'rs-rm-vrd',label:'Void Round Directly',desc:'Directly void a game round.'},
+      {id:'rs-rm-vstf',label:'Void Settle Transaction By File',desc:'Void and settle transactions using a file upload.'},
+      {id:'rs-rm-rpkd',label:'Restore PKD Result',desc:'Restore a previously voided PKD result.'},
+    ]},
+    {id:'rs-rq',label:'Result Query',children:[
+      {id:'rs-rq-rh',label:'Result History',desc:'View historical game results.'},
+      {id:'rs-rq-rhu',label:'Result History With Unsettle',desc:'View results including unsettled rounds.'},
+      {id:'rs-rq-rth',label:'Result Trend History',desc:'Analyse result trends over time.'},
+      {id:'rs-rq-rm',label:'Result Monitor',desc:'Monitor live game results.'},
+      {id:'rs-rq-rpr',label:'Random Pay Result',desc:'View random pay result records.'},
+      {id:'rs-rq-rmbt',label:'Result Monitor By Time',desc:'Monitor results filtered by time range.'},
+    ]},
+  ]},
+  {id:'ss',label:'Streaming Setting',icon:'ti-video',short:'Streaming',children:[
+    {id:'ss-sdt',label:'Streaming Delay Time',desc:'Configure the streaming delay time for live tables.'},
+  ]},
+  {id:'adm',label:'Admin',icon:'ti-settings',short:'Admin',children:[
+    {id:'adm-am',label:'Account Management',desc:'Manage admin accounts and credentials.'},
+    {id:'adm-rm',label:'Role Management',desc:'Define and manage user roles.'},
+    {id:'adm-pm',label:'Permission Management',desc:'Configure role-based permissions.'},
+  ]},
+  {id:'sa',label:'Super Admin',icon:'ti-shield-lock',short:'Super Admin',children:[
+    {id:'sa-awt',label:'Account & Wallet Tools',children:[
+      {id:'sa-awt-cta',label:'Create Test Account',desc:'Create test accounts for QA purposes.'},
+      {id:'sa-awt-mkr',label:'MarKetKR Auto Add Balance',desc:'Automatically add balance for MarKetKR accounts.'},
+      {id:'sa-awt-cm',label:'Currency Management',desc:'Manage supported currencies and exchange settings.'},
+    ]},
+    {id:'sa-sm',label:'System Maintenance',children:[
+      {id:'sa-sm-rtl',label:'Repair Txn Log',desc:'Repair transaction log records.'},
+      {id:'sa-sm-rttl',label:'Repair Tip Txn Log',desc:'Repair tip transaction log records.'},
+      {id:'sa-sm-rrl',label:'Repair Result Log',desc:'Repair result log records.'},
+      {id:'sa-sm-rrol',label:'Repair Result Odds Log',desc:'Repair result odds log records.'},
+      {id:'sa-sm-rrprl',label:'Repair Random Pay Result Log',desc:'Repair random pay result log records.'},
+    ]},
+    {id:'sa-sc',label:'System Configuration',children:[
+      {id:'sa-sc-hip',label:'Host IP Whitelist',desc:'Manage whitelisted host IP addresses.'},
+    ]},
+    {id:'sa-ot',label:'Operations Tools',desc:'Access miscellaneous operational tools.'},
+  ]},
+];
+
+let activeL1 = menu[0].id;
+const openL2 = new Set();
+let activeLeaf = null;
+
+function findItem(items,id){for(const it of items){if(it.id===id)return it;if(it.children){const f=findItem(it.children,id);if(f)return f;}}}
+function findParents(items,id,path=[]){for(const it of items){if(it.id===id)return[...path,it];if(it.children){const f=findParents(it.children,id,[...path,it]);if(f)return f;}}}
+function isLeaf(item){return!item.children;}
+
+function renderRail(){
+  const el=document.getElementById('rail');
+  el.innerHTML=menu.map(l1=>`
+    <div class="r-item${activeL1===l1.id?' active':''}" data-l1="${l1.id}">
+      <i class="ti ${l1.icon}" aria-hidden="true"></i>
+      <span>${l1.short||l1.label}</span>
+    </div>`).join('');
+  el.querySelectorAll('[data-l1]').forEach(e=>{
+    e.addEventListener('click',()=>{
+      if(activeL1!==e.dataset.l1){openL2.clear();activeL1=e.dataset.l1;}
+      renderRail();renderSubnav();
+    });
+  });
+}
+
+function renderSubnav(){
+  const l1=findItem(menu,activeL1);
+  document.getElementById('subnav-title').textContent=l1.label;
+  const el=document.getElementById('subnav');
+  if(!l1.children){el.innerHTML='';return;}
+  let html='';
+  for(const l2 of l1.children){
+    const leaf2=isLeaf(l2);
+    const o2=openL2.has(l2.id);
+    const isLA=activeLeaf===l2.id;
+    html+=`<div class="sn2${isLA?' leaf-active':''}${o2?' open':''}" data-id="${l2.id}" data-leaf="${leaf2}">
+      <span class="lbl">${l2.label}</span>
+      ${!leaf2?`<i class="ti ti-chevron-right chev${o2?' open':''}"></i>`:''}
+    </div>`;
+    if(!leaf2&&o2){
+      for(const l3 of l2.children){
+        html+=`<div class="sn3${activeLeaf===l3.id?' active':''}" data-id="${l3.id}" data-leaf="true">${l3.label}</div>`;
+      }
+    }
+  }
+  el.innerHTML=html;
+  el.querySelectorAll('[data-id]').forEach(e=>{
+    e.addEventListener('click',()=>{
+      const id=e.dataset.id;
+      const leaf=e.dataset.leaf==='true';
+      const item=findItem(menu,id);
+      if(leaf){
+        activeLeaf=id;
+        const parents=findParents(menu,id)||[];
+        document.getElementById('bc').textContent=parents.map(p=>p.label).join(' › ');
+        document.getElementById('content').innerHTML=`
+          <div class="content-card">
+            <span class="ctag">${parents[0]?parents[0].label:''}</span>
+            <div class="ctitle">${item.label}</div>
+            <div class="cdesc">${item.desc||'Configure settings for '+item.label+'.'}</div>
+          </div>`;
+      } else {
+        openL2.has(id)?openL2.delete(id):openL2.add(id);
+      }
+      renderSubnav();
+    });
+  });
+}
+
+renderRail();renderSubnav();
+</script>
