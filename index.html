@@ -8,12 +8,13 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;display:flex;align-items:center;justify-content:center;min-height:100vh}
 .shell{display:flex;height:680px;width:900px;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.18)}
-.rail{width:72px;min-width:72px;background:#0f1923;display:flex;flex-direction:column;align-items:center;padding-top:0;overflow-y:auto;overflow-x:hidden}
-.rail::-webkit-scrollbar{display:none}
-.rail-logo{width:72px;height:48px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:6px;flex-shrink:0}
+.rail{width:72px;min-width:72px;background:#0f1923;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.rail-logo{width:72px;height:48px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
 .logo-text{font-size:11px;font-weight:700;line-height:1.15;text-align:center}
 .logo-text .s1{color:#fff}
 .logo-text .s2{color:#e05c8a}
+.rail-scroll{flex:1;overflow-y:auto;overflow-x:hidden;width:100%;display:flex;flex-direction:column;align-items:center;padding:6px 0}
+.rail-scroll::-webkit-scrollbar{display:none}
 .r-item{width:60px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:1px;padding:4px 2px;flex-shrink:0}
 .r-item svg.icon{width:20px;height:20px;stroke:rgba(255,255,255,0.38);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.15s;flex-shrink:0}
 .r-item span{font-size:9px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.2;transition:color 0.15s;word-break:break-word}
@@ -22,6 +23,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .r-item.active{background:rgba(255,255,255,0.1)}
 .r-item.active svg.icon{stroke:#e05c8a}
 .r-item.active span{color:rgba(255,255,255,0.8)}
+.rail-footer{width:100%;border-top:1px solid rgba(255,255,255,0.08);padding:10px 0;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.logout-btn{width:60px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:8px;cursor:pointer;transition:background 0.15s}
+.logout-btn svg{width:18px;height:18px;stroke:rgba(255,255,255,0.3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.15s}
+.logout-btn span{font-size:9px;color:rgba(255,255,255,0.25);transition:color 0.15s}
+.logout-btn:hover{background:rgba(224,92,138,0.12)}
+.logout-btn:hover svg{stroke:#e05c8a}
+.logout-btn:hover span{color:#e05c8a}
 .subnav{width:210px;min-width:210px;background:#1a2535;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid rgba(255,255,255,0.07)}
 .subnav-header{padding:13px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
 .subnav-title{font-size:13px;font-weight:500;color:#fff}
@@ -38,6 +46,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sn3:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8)}
 .sn3.active{background:rgba(224,92,138,0.15);color:#e05c8a}
 .sn2.leaf-active{background:rgba(224,92,138,0.15);color:#e05c8a}
+.tbd-badge{font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(245,158,11,0.2);color:#f59e0b;font-weight:500;flex-shrink:0;margin-left:4px}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
 .topbar{height:48px;border-bottom:1px solid #e2e6ea;display:flex;align-items:center;padding:0 20px;background:#fff;flex-shrink:0}
 .breadcrumb{font-size:12px;color:#888}
@@ -57,7 +66,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="rail-logo">
       <div class="logo-text"><div class="s1">sexy</div><div class="s2">2.0</div></div>
     </div>
-    <div id="rail"></div>
+    <div class="rail-scroll" id="rail"></div>
+    <div class="rail-footer">
+      <div class="logout-btn" id="logout-btn">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Log Out</span>
+      </div>
+    </div>
   </div>
   <div class="subnav">
     <div class="subnav-header"><div class="subnav-title" id="subnav-title">—</div></div>
@@ -75,7 +90,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
-const ICONS = {
+const ICONS={
   game:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/>',
   messages:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
   world:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
@@ -84,27 +99,28 @@ const ICONS = {
   video:'<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>',
   settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
   shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  monitor:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
 };
 const svgIcon=k=>`<svg class="icon" viewBox="0 0 24 24">${ICONS[k]||ICONS.settings}</svg>`;
 const chevSVG=o=>`<svg class="chev${o?' open':''}" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
 
 const menu=[
   {id:'gm',label:'Game Management',icon:'game',short:'Game',children:[
-    {id:'gm-wta',label:'Website → Table Assignment',desc:'Map tables to specific websites or domains.'},
-    {id:'gm-gc',label:'Game Configuration',children:[
+    {id:'gm-wta',label:'Website - Table Mapping',desc:'Map tables to specific websites or domains.'},
+    {id:'gm-gc',label:'Game Settings',children:[
       {id:'gm-gc-tc',label:'Table Config',desc:'General table configuration settings.'},
       {id:'gm-gc-bl',label:'Bet Limits',desc:'Configure bet limit settings per game or table.'},
       {id:'gm-gc-mrl',label:'Max Round Limit',desc:'Define maximum round limit rules.'},
       {id:'gm-gc-mbr',label:'Max Bet Round',desc:'Set maximum bet round constraints.'},
-      {id:'gm-gc-rp',label:'Random Pay Rule Configuration',desc:'Configure random pay rule settings.'},
+      {id:'gm-gc-rp',label:'Random Pay Settings',desc:'Configure random pay settings.'},
     ]},
     {id:'gm-lm',label:'Lobby Management',children:[
       {id:'gm-lm-ltd',label:'Lobby Tab Definition',desc:'Define and manage lobby tab groups.'},
-      {id:'gm-lm-lgm',label:'Lobby Tab → Game Mapping',desc:'Map game codes to lobby tab content groups.'},
-      {id:'gm-lm-tsr',label:'Lobby Tab Sorting Rule',desc:'Configure the display order of lobby tab categories.'},
-      {id:'gm-lm-tdlp',label:'Table Sorting Rule (Dealer Language Priority)',desc:'Set dealer language priority for table sorting.'},
-      {id:'gm-lm-tsp',label:'Table Sorting Rule (Studio Priority)',desc:'Configure studio priority for table ordering.'},
-      {id:'gm-lm-lpa',label:'Lobby Promotion Assignment',desc:'Assign promotions to lobby tabs.'},
+      {id:'gm-lm-lgm',label:'Lobby Tab - Game Mapping',desc:'Map game codes to lobby tab content groups.'},
+      {id:'gm-lm-lpa',label:'Lobby Tab - Promotion Assignment',desc:'Assign promotions to lobby tabs.'},
+      {id:'gm-lm-tsr',label:'Lobby Tab - Sorting Rule',desc:'Configure the display order of lobby tab categories.'},
+      {id:'gm-lm-tdlp',label:'Table Sort Order - Dealer Language',desc:'Set dealer language priority for table sorting.'},
+      {id:'gm-lm-tsp',label:'Table Sort Order - Studio',desc:'Configure studio priority for table ordering.'},
     ]},
   ]},
   {id:'ss',label:'Streaming Setting',icon:'video',short:'Streaming',children:[
@@ -117,43 +133,43 @@ const menu=[
       {id:'im-gs-gi',label:'Gift Icon & Display Order',desc:'Configure gift icons and their display ordering.'},
     ]},
     {id:'im-ch',label:'Chat',children:[
-      {id:'im-ch-bk',label:'Block Key Word',desc:'Manage blocked keywords in chat.'},
+      {id:'im-ch-bk',label:'Blocked Keywords',desc:'Manage blocked keywords in chat.'},
       {id:'im-ch-cm',label:'Chat Mute List',desc:'Manage the list of muted players in chat.'},
-      {id:'im-ch-cs',label:'Chat Scope Settings',desc:'Configure chat scope and visibility rules.'},
+      {id:'im-ch-cs',label:'Chat Tier Settings',desc:'Configure chat scope and visibility rules.'},
       {id:'im-ch-cmh',label:'Chat Message History',desc:'View and search chat message history.'},
-      {id:'im-ch-nn',label:'Nick Name History (90 days)',desc:'View nickname change history for the past 90 days.'},
+      {id:'im-ch-nn',label:'Nickname History (90 Days)',desc:'View nickname change history for the past 90 days.'},
     ]},
   ]},
   {id:'wm',label:'Website Management',icon:'world',short:'Website',children:[
     {id:'wm-ewf',label:'Enable Website Features',desc:'Toggle website features on or off.'},
-    {id:'wm-api',label:'API & Integration Settings',children:[
-      {id:'wm-api-sip',label:'API Safe IP',desc:'Configure whitelisted safe IPs for API access.'},
-      {id:'wm-api-sp',label:'API Site Properties',desc:'Manage API site property settings.'},
+    {id:'wm-api',label:'Integration Settings',children:[
+      {id:'wm-api-sip',label:'Website API IP Allowlist',desc:'Configure whitelisted IPs for API access.'},
+      {id:'wm-api-sp',label:'Website Properties',desc:'Manage website property settings.'},
+      {id:'wm-api-wpo',label:'Website Parameter Overview',desc:'Overview of all website configuration parameters.'},
     ]},
     {id:'wm-drr',label:'Domain Routing Rules',children:[
       {id:'wm-drr-ds',label:'Domain Setting',desc:'Manage domain name configurations.'},
       {id:'wm-drr-er',label:'Enforce Redirect',desc:'Configure forced redirect rules for domains.'},
     ]},
     {id:'wm-aw',label:'Add Website',desc:'Register and add a new website to the platform.'},
-    {id:'wm-wpo',label:'Website Parameter Overview',desc:'Overview of all website configuration parameters.'},
   ]},
   {id:'rp',label:'Report',icon:'chart',short:'Report',children:[
     {id:'rp-tr',label:'Transaction Reports',children:[
-      {id:'rp-tr-thd',label:'Txn History By Domain',desc:'View transaction history filtered by domain.'},
-      {id:'rp-tr-tht',label:'Txn History By TxnID',desc:'View transaction history filtered by transaction ID.'},
-      {id:'rp-tr-thu',label:'Txn History By UserID',desc:'View transaction history filtered by user ID.'},
+      {id:'rp-tr-thd',label:'Transaction History By Domain',desc:'View transaction history filtered by domain.'},
+      {id:'rp-tr-tht',label:'Transaction History By TxnID',desc:'View transaction history filtered by transaction ID.'},
+      {id:'rp-tr-thu',label:'Transaction History By UserID',desc:'View transaction history filtered by user ID.'},
     ]},
     {id:'rp-cr',label:'Custom Reports',children:[
-      {id:'rp-cr-kr1',label:'Txn History Sum by UserId For KR Site',desc:'Summarised transaction history by user ID for KR site.'},
-      {id:'rp-cr-kr2',label:'Txn History Sum Group By Currency For KR Site',desc:'Summarised transaction history grouped by currency for KR site.'},
+      {id:'rp-cr-kr1',label:'Transaction History Sum by UserId For KR Site',desc:'Summarised transaction history by user ID for KR site.'},
+      {id:'rp-cr-kr2',label:'Transaction History Sum Group By Currency For KR Site',desc:'Summarised transaction history grouped by currency for KR site.'},
     ]},
     {id:'rp-pr',label:'Performance Reports',children:[
       {id:'rp-pr-t10',label:'Top 10 Reports',desc:'View top 10 performance reports.'},
       {id:'rp-pr-rbw',label:'Report By Website',desc:'Performance report grouped by website.'},
+      {id:'rp-pr-rgs',label:'Report By GameShoe',desc:'View results reported by game shoe.'},
     ]},
   ]},
   {id:'rs',label:'Result',icon:'tournament',short:'Result',children:[
-    {id:'rs-rgs',label:'Report By GameShoe',desc:'View results reported by game shoe.'},
     {id:'rs-rm',label:'Result Modify',children:[
       {id:'rs-rm-ar',label:'Add Result',desc:'Manually add a game result.'},
       {id:'rs-rm-vrd',label:'Void Round Directly',desc:'Directly void a game round.'},
@@ -165,32 +181,56 @@ const menu=[
       {id:'rs-rq-rhu',label:'Result History With Unsettle',desc:'View results including unsettled rounds.'},
       {id:'rs-rq-rth',label:'Result Trend History',desc:'Analyse result trends over time.'},
       {id:'rs-rq-rm',label:'Result Monitor',desc:'Monitor live game results.'},
-      {id:'rs-rq-rpr',label:'Random Pay Result',desc:'View random pay result records.'},
       {id:'rs-rq-rmbt',label:'Result Monitor By Time',desc:'Monitor results filtered by time range.'},
+      {id:'rs-rq-rpr',label:'Random Pay Result',desc:'View random pay result records.'},
+      {id:'rs-rq-rr',label:'Round Report',desc:'View round-level result reports.'},
     ]},
   ]},
   {id:'adm',label:'Admin',icon:'settings',short:'Admin',children:[
-    {id:'adm-am',label:'Account Management',desc:'Manage admin accounts and credentials.'},
-    {id:'adm-rm',label:'Role Management',desc:'Define and manage user roles.'},
-    {id:'adm-pm',label:'Permission Management',desc:'Configure role-based permissions.'},
+    {id:'adm-am',label:'Account Management',desc:'Manage admin accounts and credentials.',tbd:true},
+    {id:'adm-rm',label:'Role Management',desc:'Define and manage user roles.',tbd:true},
+    {id:'adm-pm',label:'Permission Management',desc:'Configure role-based permissions.',tbd:true},
+    {id:'adm-lo',label:'OP Locked',desc:'View and manage locked operator accounts.'},
+    {id:'adm-co',label:'Create OP Account',desc:'Create a new operator account.'},
+    {id:'adm-cp',label:'Change OP Pwd',desc:'Change the password of an operator account.'},
+    {id:'adm-chp',label:'Change Pwd',desc:'Change current account password.'},
   ]},
   {id:'sa',label:'Super Admin',icon:'shield',short:'Super Admin',children:[
     {id:'sa-awt',label:'Account & Wallet Tools',children:[
       {id:'sa-awt-cta',label:'Create Test Account',desc:'Create test accounts for QA purposes.'},
-      {id:'sa-awt-mkr',label:'MarKetKR Auto Add Balance',desc:'Automatically add balance for MarKetKR accounts.'},
+      {id:'sa-awt-mkr',label:'MarketKR Balance Management',desc:'Manage balance settings for MarketKR accounts.'},
       {id:'sa-awt-cm',label:'Currency Management',desc:'Manage supported currencies and exchange settings.'},
     ]},
-    {id:'sa-sm',label:'System Maintenance',children:[
-      {id:'sa-sm-rtl',label:'Repair Txn Log',desc:'Repair transaction log records.'},
-      {id:'sa-sm-rttl',label:'Repair Tip Txn Log',desc:'Repair tip transaction log records.'},
-      {id:'sa-sm-rrl',label:'Repair Result Log',desc:'Repair result log records.'},
-      {id:'sa-sm-rrol',label:'Repair Result Odds Log',desc:'Repair result odds log records.'},
-      {id:'sa-sm-rrprl',label:'Repair Random Pay Result Log',desc:'Repair random pay result log records.'},
+    {id:'sa-pc',label:'Player Controls',children:[
+      {id:'sa-pc-brr',label:'Bet Rejection Rate by Player',desc:'Configure bet rejection rate settings per player.'},
     ]},
-    {id:'sa-sc',label:'System Configuration',children:[
-      {id:'sa-sc-hip',label:'Host IP Whitelist',desc:'Manage whitelisted host IP addresses.'},
+    {id:'sa-dm',label:'Data Maintenance',children:[
+      {id:'sa-dm-rtl',label:'Repair Txn Log',desc:'Repair transaction log records.'},
+      {id:'sa-dm-rtl2',label:'Repair Txn Log 2',desc:'Repair transaction log records (batch 2).'},
+      {id:'sa-dm-rttl',label:'Repair Tip Txn Log',desc:'Repair tip transaction log records.'},
+      {id:'sa-dm-rttl2',label:'Repair Tip Txn Log 2',desc:'Repair tip transaction log records (batch 2).'},
+      {id:'sa-dm-rrl',label:'Repair Result Log',desc:'Repair result log records.'},
+      {id:'sa-dm-rrl2',label:'Repair Result Log 2',desc:'Repair result log records (batch 2).'},
+      {id:'sa-dm-rrol',label:'Repair Result Odds Log',desc:'Repair result odds log records.'},
+      {id:'sa-dm-rrol2',label:'Repair Result Odds Log 2',desc:'Repair result odds log records (batch 2).'},
+      {id:'sa-dm-rrprl',label:'Repair Random Pay Result Log',desc:'Repair random pay result log records.'},
+      {id:'sa-dm-rrprl2',label:'Repair Random Pay Result Log 2',desc:'Repair random pay result log records (batch 2).'},
     ]},
-    {id:'sa-ot',label:'Operations Tools',desc:'Access miscellaneous operational tools.'},
+    {id:'sa-mc',label:'Maintenance Control',children:[
+      {id:'sa-mc-gms',label:'Global Maintenance - For Site',desc:'Activate site-level global maintenance mode.'},
+      {id:'sa-mc-gm',label:'Global Maintenance',desc:'Activate global maintenance mode.'},
+    ]},
+    {id:'sa-sc',label:'System Settings',children:[
+      {id:'sa-sc-hip',label:'System IP Allowlist',desc:'Manage whitelisted system IP addresses.'},
+      {id:'sa-sc-so',label:'System Configuration',desc:'Access system-level configuration settings.'},
+    ]},
+  ]},
+  {id:'ts',label:'Technical Support',icon:'monitor',short:'Tech Support',children:[
+    {id:'ts-mo',label:'Monitoring',children:[
+      {id:'ts-mo-ws',label:'Monitor Websocket Init Count',desc:'Monitor websocket initialisation counts.'},
+      {id:'ts-mo-gb',label:'Measure getBalance Timeout Count',desc:'Measure getBalance timeout occurrences.'},
+      {id:'ts-mo-st',label:'Measure Session Transfer Count',desc:'Measure session transfer counts.'},
+    ]},
   ]},
 ];
 
@@ -229,6 +269,7 @@ function renderSubnav(){
     const isLA=activeLeaf===l2.id;
     html+=`<div class="sn2${isLA?' leaf-active':''}${o2?' open':''}" data-id="${l2.id}" data-leaf="${leaf2}">
       <span class="lbl">${l2.label}</span>
+      ${l2.tbd?'<span class="tbd-badge">TBD</span>':''}
       ${!leaf2?chevSVG(o2):''}
     </div>`;
     if(!leaf2&&o2){
@@ -250,7 +291,8 @@ function renderSubnav(){
         document.getElementById('content').innerHTML=`
           <div class="content-card">
             <span class="ctag">${parents[0]?parents[0].label:''}</span>
-            <div class="ctitle">${item.label}</div>
+            <div class="ctitle">${item.label}${item.tbd?` <span style="font-size:12px;color:#f59e0b;font-weight:400;">(TBD)</span>`:''}
+            </div>
             <div class="cdesc">${item.desc||'Configure settings for '+item.label+'.'}</div>
           </div>`;
       } else {
@@ -260,6 +302,10 @@ function renderSubnav(){
     });
   });
 }
+
+document.getElementById('logout-btn').addEventListener('click',()=>{
+  alert('Log Out clicked');
+});
 
 renderRail();renderSubnav();
 </script>
